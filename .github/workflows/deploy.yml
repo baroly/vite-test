@@ -1,0 +1,35 @@
+name: Deploy Vite Project
+
+on:
+  push:
+    branches:
+      - master # 當 master 分支有新的 push 時觸發
+
+# 註解裡人家會保持專業不賣萌喔：
+# 賦予這個 workflow 修改 Pages 和 Token 的權限
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist # 告訴機器人把打包好的 dist 資料夾推送到 gh-pages 分支
+          branch: gh-pages
